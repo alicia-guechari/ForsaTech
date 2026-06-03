@@ -55,6 +55,14 @@ export default function SignUpPage() {
             interests: form.interests,
         }
 
+        // persist mock user so sign-in can restore role
+        try {
+            const { saveMockUser } = await import('@/lib/auth/mockUsers')
+            saveMockUser({ ...user, password: form.password })
+        } catch (e) {
+            // ignore in non-browser environments
+        }
+
         setAuth(user, btoa(`${form.email}:${Date.now()}`))
         setSuccess(true)
         setTimeout(() => router.push(form.role === 'odej' ? '/odej' : '/profile'), 900)

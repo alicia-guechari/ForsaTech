@@ -13,7 +13,15 @@ export function Navbar() {
     const router = useRouter()
     const [scrolled, setScrolled] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
+    const [hydrated, setHydrated] = useState(false)
     const notifications = useAppStore(state => state.notifications)
+
+    // Wait for Zustand to hydrate from localStorage before rendering
+    useEffect(() => {
+        setHydrated(true)
+    }, [])
+
+    const isOdejMode = (user?.role === 'odej') || pathname?.startsWith('/odej')
 
     const notificationCount = useMemo(() => {
         if (!user) return 0
@@ -24,15 +32,17 @@ export function Navbar() {
         )).length
     }, [notifications, user])
 
-    const navLinks = !isAuthenticated
+    const navLinks = !hydrated
         ? []
-        : pathname?.startsWith('/odej') || user?.role === 'odej'
+        : isOdejMode
             ? [{ href: '/odej', label: 'Dashboard' }]
-            : [
-                { href: '/opportunities', label: 'Opportunities' },
-                { href: '/initiatives', label: 'Initiatives' },
-                { href: '/dashboard/network', label: 'My Network' },
-            ]
+            : !isAuthenticated
+                ? []
+                : [
+                    { href: '/opportunities', label: 'Opportunities' },
+                    { href: '/initiatives', label: 'Initiatives' },
+                    { href: '/dashboard/network', label: 'My Network' },
+                ]
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -122,7 +132,18 @@ export function Navbar() {
 
             {/* Auth actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {isAuthenticated ? (
+                {!hydrated ? (
+                    // During hydration, show minimal nav to prevent mismatch
+                    null
+                ) : isOdejMode ? (
+                    isAuthenticated ? (
+                        <>
+                            <button onClick={handleLogout} className="btn-secondary" style={{ padding: '8px 14px', fontSize: '13px' }}>
+                                Logout
+                            </button>
+                        </>
+                    ) : null
+                ) : isAuthenticated ? (
                     <>
                         {/* Notification bell */}
                         <Link href="/dashboard/notifications" style={{
@@ -190,7 +211,7 @@ export function Navbar() {
                 )}
 
                 {/* Mobile hamburger */}
-                {isAuthenticated && user?.role !== 'odej' && (
+                {!isOdejMode && isAuthenticated && hydrated && (
                     <button
                         onClick={() => setMenuOpen(prev => !prev)}
                         style={{
@@ -213,7 +234,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile menu */}
-            {menuOpen && (
+            {menuOpen && !isOdejMode && hydrated && (
                 <div style={{
                     position: 'absolute',
                     top: '68px',

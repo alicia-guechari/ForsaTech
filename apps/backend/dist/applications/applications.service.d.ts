@@ -10,4 +10,7 @@ export declare class ApplicationsService {
     findByMe(user: User): Promise<Application[]>;
     findByOdej(odejAdmin: User): Promise<Application[]>;
     updateStatus(id: string, status: ApplicationStatus): Promise<Application | null>;
+    delete(id: string): Promise<{
+        success: boolean;
+    }>;
 }

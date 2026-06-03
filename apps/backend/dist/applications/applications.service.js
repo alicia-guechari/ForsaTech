@@ -65,6 +65,13 @@ let ApplicationsService = class ApplicationsService {
         await this.applicationRepository.update(id, { status });
         return this.applicationRepository.findOneBy({ id });
     }
+    async delete(id) {
+        const app = await this.applicationRepository.findOneBy({ id });
+        if (!app)
+            throw new common_1.BadRequestException('Application not found');
+        await this.applicationRepository.delete(id);
+        return { success: true };
+    }
 };
 exports.ApplicationsService = ApplicationsService;
 exports.ApplicationsService = ApplicationsService = __decorate([

@@ -7,4 +7,7 @@ export declare class ApplicationsController {
     findByMe(req: any): Promise<import("../entities/application.entity").Application[]>;
     findByOdej(req: any): Promise<import("../entities/application.entity").Application[]>;
     updateStatus(id: string, status: ApplicationStatus): Promise<import("../entities/application.entity").Application | null>;
+    delete(id: string): Promise<{
+        success: boolean;
+    }>;
 }

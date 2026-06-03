@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, Request } from '@nestjs/common';
 import { ApplicationsService } from './applications.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApplicationStatus } from '../entities/application.entity';
@@ -26,5 +26,10 @@ export class ApplicationsController {
     @Patch(':id/status')
     updateStatus(@Param('id') id: string, @Body('status') status: ApplicationStatus) {
         return this.applicationsService.updateStatus(id, status);
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id: string) {
+        return this.applicationsService.delete(id);
     }
 }

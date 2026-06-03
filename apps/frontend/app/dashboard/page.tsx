@@ -8,7 +8,7 @@ import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useAppStore } from '@/lib/store/useAppStore'
 import {
     Award, TrendingUp, CalendarCheck, Heart,
-    Lightbulb, BookmarkCheck, ArrowRight, Star, Bell
+    Lightbulb, BookmarkCheck, ArrowRight, Star, Bell, CheckCircle2
 } from 'lucide-react'
 
 const mockStats = [
@@ -109,6 +109,24 @@ export default function DashboardPage() {
                                     {mockBadges.map(b => <BadgeCard key={b.name} badge={b} />)}
                                 </div>
                             </div>
+
+                            {/* Applications link */}
+                            <Link href="/dashboard/applications" className="glass card-hover"
+                                style={{ padding: 24, display: 'flex', alignItems: 'center', gap: 16, textDecoration: 'none', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05))', borderLeft: '3px solid #10b981' }}>
+                                <div style={{
+                                    width: 48, height: 48, borderRadius: '50%',
+                                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    flexShrink: 0,
+                                }}>
+                                    <CheckCircle2 size={22} color="white" />
+                                </div>
+                                <div>
+                                    <p style={{ fontSize: 16, fontWeight: 600, color: '#f8f8ff', marginBottom: 4 }}>My Applications</p>
+                                    <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Track and manage your applications →</p>
+                                </div>
+                                <ArrowRight size={18} color="#10b981" style={{ marginLeft: 'auto' }} />
+                            </Link>
 
                             {/* Network link */}
                             <Link href="/dashboard/network" className="glass-purple card-hover"

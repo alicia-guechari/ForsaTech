@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import {
     LayoutDashboard, Plus, Users, Lightbulb, HelpCircle,
-    BarChart3, CheckCircle2, XCircle, FileText, ArrowUpRight, TrendingUp, Calendar, Check, X
+    BarChart3, CheckCircle2, XCircle, FileText, ArrowUpRight, TrendingUp, Calendar, Check, X, ClipboardList
 } from 'lucide-react'
 
 const recentInitiatives = [
@@ -175,6 +175,9 @@ export default function OdejDashboardPage() {
                             <button className="btn-primary" onClick={() => setShowCreateModal(true)}>
                                 <Plus size={18} /> New Opportunity
                             </button>
+                            <Link href="/odej/applications" className="btn-secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                                <ClipboardList size={18} /> Manage Applications
+                            </Link>
                             <Link href="/odej/approvals" className="btn-secondary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                                 <CheckCircle2 size={18} /> Approve Initiatives
                             </Link>

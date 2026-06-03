@@ -39,19 +39,41 @@ export default function SignInPage() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
 
-        const name = formatName(form.email)
-        const user = {
-            id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-            name,
-            email: form.email.trim(),
-            role: 'youth',
-            avatar: createAvatar(name),
-            wilaya: 'Unknown',
+        // Try to lookup a previously registered mock user to restore role (odej vs youth)
+        let userToUse: any = null
+        try {
+            const { findMockUserByEmail } = await import('@/lib/auth/mockUsers')
+            const found = findMockUserByEmail(form.email.trim())
+            if (found) {
+                userToUse = {
+                    id: found.id,
+                    name: found.name,
+                    email: found.email,
+                    role: found.role,
+                    avatar: found.avatar,
+                    wilaya: found.wilaya,
+                    interests: found.interests,
+                }
+            }
+        } catch (e) {
+            // ignore
         }
 
-        setAuth(user, btoa(`${form.email}:${Date.now()}`))
+        if (!userToUse) {
+            const name = formatName(form.email)
+            userToUse = {
+                id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+                name,
+                email: form.email.trim(),
+                role: 'youth',
+                avatar: createAvatar(name),
+                wilaya: 'Unknown',
+            }
+        }
+
+        setAuth(userToUse, btoa(`${form.email}:${Date.now()}`))
         setSuccess(true)
-        setTimeout(() => router.push('/profile'), 700)
+        setTimeout(() => router.push(userToUse.role === 'odej' ? '/odej' : '/profile'), 700)
     }
 
     return (

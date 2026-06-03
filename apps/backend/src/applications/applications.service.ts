@@ -61,4 +61,11 @@ export class ApplicationsService {
         await this.applicationRepository.update(id, { status });
         return this.applicationRepository.findOneBy({ id });
     }
+
+    async delete(id: string) {
+        const app = await this.applicationRepository.findOneBy({ id });
+        if (!app) throw new BadRequestException('Application not found');
+        await this.applicationRepository.delete(id);
+        return { success: true };
+    }
 }
