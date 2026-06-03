@@ -1,0 +1,50 @@
+2026-06-03 04:29:03.209 WAT [18268] LOG:  démarrage de PostgreSQL 18.1 on x86_64-windows, compiled by msvc-19.44.35221, 64-bit
+2026-06-03 04:29:03.215 WAT [18268] LOG:  en écoute sur IPv6, adresse « ::1 », port 5433
+2026-06-03 04:29:03.215 WAT [18268] LOG:  en écoute sur IPv4, adresse « 127.0.0.1 », port 5433
+2026-06-03 04:29:03.320 WAT [20748] LOG:  le système de bases de données a été arrêté à 2026-06-03 04:28:55 WAT
+2026-06-03 04:29:03.329 WAT [18268] LOG:  le système de bases de données est prêt pour accepter les connexions
+2026-06-03 04:31:12.892 WAT [19356] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 04:34:03.314 WAT [27436] LOG:  début du checkpoint : time
+2026-06-03 04:36:00.611 WAT [27436] LOG:  checkpoint complete: wrote 1082 buffers (6.6%), wrote 3 SLRU buffers; 1 WAL file(s) added, 0 removed, 0 recycled; write=117.085 s, sync=0.132 s, total=117.298 s; sync files=368, longest=0.001 s, average=0.001 s; distance=5456 kB, estimate=5456 kB; lsn=0/1D457A0, redo lsn=0/1D45710
+2026-06-03 04:48:42.923 WAT [23640] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 04:48:57.104 WAT [26732] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:27:44.166 WAT [25972] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:27:44.166 WAT [19060] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:31:51.463 WAT [24172] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:31:51.522 WAT [24992] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:31:51.972 WAT [4240] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:41:00.634 WAT [17132] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:55:22.549 WAT [23620] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 05:57:51.499 WAT [2456] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 06:00:14.140 WAT [23484] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:00:06.911 WAT [20500] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:00:16.056 WAT [12824] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:15:18.607 WAT [24280] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:15:18.607 WAT [24280] LOG:  fin de fichier (EOF) inattendue de la connexion du client avec une
+	transaction ouverte
+2026-06-03 07:28:18.421 WAT [21816] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:42:13.080 WAT [14792] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:42:16.503 WAT [18952] LOG:  n'a pas pu recevoir les données du client : An existing connection was forcibly closed by the remote host.
+	
+2026-06-03 07:54:54.635 WAT [18268] LOG:  processus en tâche de fond « logical replication launcher » (PID 26384) a été arrêté par l'exception 0xC000013A
+2026-06-03 07:54:54.635 WAT [18268] ASTUCE :  Voir le fichier d'en-tête C « ntstatus.h » pour une description de la valeur
+	hexadécimale.
+2026-06-03 07:54:54.636 WAT [18268] LOG:  arrêt des autres processus serveur actifs
+^C

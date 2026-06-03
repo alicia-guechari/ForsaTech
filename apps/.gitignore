@@ -1,0 +1,76 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+
+
+# Backend specific
+node_modules/
+vendor/              # PHP Composer
+__pycache__/         # Python
+*.pyc
+*.pyo
+.env
+.env.*
+*.sql
+*.sqlite
+tmp/
+temp/
+uploads/
+storage/
+logs/
+*.pid
+coverage/
+.nyc_output/
+
+# Frontend specific
+node_modules/
+dist/
+build/
+.cache/
+.parcel-cache/
+.env
+.env.*
+*.local
+.DS_Store
+coverage/
+.nyc_output/
+
+# Database files - DO NOT COMMIT
+pgdata/
+*.pgsql
+*.sql
+*.db
+*.sqlite
