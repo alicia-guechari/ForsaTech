@@ -5,7 +5,7 @@ interface User {
     id: string;
     email: string;
     name: string;
-    role: string;
+    role: 'youth' | 'odej';
     avatar?: string;
     wilaya?: string;
     interests?: string[];
@@ -42,7 +42,7 @@ export const useAuthStore = create<AuthState>()(
             }),
         }),
         {
-            name: 'forsatech-auth',
+            name: 'forsatech-auth-v2',
         }
     )
 )
