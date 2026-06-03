@@ -1,6 +1,7 @@
 'use client'
 import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { AuthGuard } from '@/components/AuthGuard'
@@ -138,6 +139,38 @@ export default function ProfilePage() {
                                             </div>
                                         </div>
                                     </>
+                                )}
+
+                                {/* Saved Opportunities */}
+                                {user?.role !== 'odej' && (
+                                    <div className="glass" style={{ padding: 28 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                                            <h2 style={{ fontSize: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                <Bookmark size={20} color="#a78bfa" /> Saved Opportunities
+                                            </h2>
+                                            <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{savedOffersList.length} saved</span>
+                                        </div>
+
+                                        {savedOffersList.length === 0 ? (
+                                            <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>You haven't saved any opportunities yet.</p>
+                                        ) : (
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+                                                {savedOffersList.map(offer => (
+                                                    <Link href={`/opportunities/${offer.id}`} key={offer.id} style={{
+                                                        padding: 16, background: 'rgba(255,255,255,0.03)', borderRadius: 16,
+                                                        border: '1px solid rgba(255,255,255,0.05)', textDecoration: 'none', color: 'inherit',
+                                                        display: 'flex', flexDirection: 'column', gap: 8
+                                                    }} className="hover:bg-white/5">
+                                                        <span style={{ fontSize: 11, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{offer.category}</span>
+                                                        <h3 style={{ fontSize: 15, margin: 0 }}>{offer.title}</h3>
+                                                        <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 'auto' }}>
+                                                            {offer.wilaya} · {offer.odej}
+                                                        </p>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
 
                                 {/* Settings / Security Quick Links */}

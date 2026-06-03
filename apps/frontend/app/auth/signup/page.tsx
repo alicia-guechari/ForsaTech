@@ -52,6 +52,7 @@ export default function SignUpPage() {
             role: form.role,
             avatar: createAvatar(userName),
             wilaya: form.wilaya || 'Unknown',
+            interests: form.interests,
         }
 
         setAuth(user, btoa(`${form.email}:${Date.now()}`))

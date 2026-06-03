@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import { Info, Filter, RefreshCw, X } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 
@@ -37,7 +38,8 @@ interface BubbleState {
 function useNetworkGraph(
     canvasRef: React.RefObject<HTMLCanvasElement | null>,
     opportunities: typeof mockOpportunities,
-    userAvatar: string
+    userAvatar: string,
+    refreshKey: number
 ) {
     const [hovered, setHovered] = useState<{ opp: (typeof mockOpportunities)[0]; x: number; y: number } | null>(null)
     const [selected, setSelected] = useState<(typeof mockOpportunities)[0] | null>(null)
@@ -264,15 +266,17 @@ function useNetworkGraph(
             canvas.removeEventListener('mousemove', onMouseMove)
             canvas.removeEventListener('click', onClick)
         }
-    }, [canvasRef, opportunities, userAvatar])
+    }, [canvasRef, opportunities, userAvatar, refreshKey])
 
-    return { hovered, selected }
+    return { hovered, selected, setSelected }
 }
 
 export default function NetworkPage() {
     const router = useRouter()
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const { user, isAuthenticated } = useAuthStore()
+    const [refreshKey, setRefreshKey] = useState(0)
+    const [filterCategory, setFilterCategory] = useState('All')
 
     const userProfile = {
         name: user?.name || 'ForsaTech User',
@@ -284,10 +288,10 @@ export default function NetworkPage() {
         const matchesWilaya = user?.wilaya ? opp.odej.includes(user.wilaya) : false
         const matchesInterest = user?.interests?.some(interest => opp.category.toLowerCase() === interest.toLowerCase() || opp.category.toLowerCase().includes(interest.toLowerCase()))
         return matchesWilaya || Boolean(matchesInterest)
-    }) : mockOpportunities
+    }).filter(opp => filterCategory === 'All' || opp.category === filterCategory) : mockOpportunities
 
     const displayedOpportunities = personalizedOpportunities.length ? personalizedOpportunities : mockOpportunities
-    const { hovered, selected } = useNetworkGraph(canvasRef, displayedOpportunities, userProfile.avatar)
+    const { hovered, selected, setSelected } = useNetworkGraph(canvasRef, displayedOpportunities, userProfile.avatar, refreshKey)
 
     return (
         <main>
@@ -308,10 +312,14 @@ export default function NetworkPage() {
                             </p>
                         </div>
                         <div style={{ display: 'flex', gap: 10 }}>
-                            <button className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
-                                <Filter size={14} /> Filter
+                            <button onClick={() => {
+                                const currentIndex = CATEGORIES.indexOf(filterCategory)
+                                const nextIndex = (currentIndex + 1) % CATEGORIES.length
+                                setFilterCategory(CATEGORIES[nextIndex])
+                            }} className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <Filter size={14} /> Filter: {filterCategory}
                             </button>
-                            <button className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <button onClick={() => setRefreshKey(k => k + 1)} className="btn-secondary" style={{ fontSize: 13, padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
                                 <RefreshCw size={14} /> Refresh
                             </button>
                         </div>

@@ -2,8 +2,10 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, MapPin } from 'lucide-react'
+import { useAuthStore } from '@/lib/store/useAuthStore'
 
 export function HeroSection() {
+    const { user, isAuthenticated } = useAuthStore()
     return (
         <section style={{
             minHeight: '100vh',
@@ -86,13 +88,27 @@ export function HeroSection() {
 
                     {/* CTA buttons */}
                     <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 60 }}>
-                        <Link href="/auth/signup" className="btn-primary" style={{ fontSize: '16px', padding: '14px 28px' }}>
-                            Get Started
-                            <ArrowRight size={18} />
-                        </Link>
-                        <Link href="/opportunities" className="btn-secondary" style={{ fontSize: '16px', padding: '14px 28px' }}>
-                            Explore Opportunities
-                        </Link>
+                        {!isAuthenticated ? (
+                            <>
+                                <Link href="/auth/signup" className="btn-primary" style={{ fontSize: '16px', padding: '14px 28px' }}>
+                                    Get Started
+                                    <ArrowRight size={18} />
+                                </Link>
+                                <Link href="/opportunities" className="btn-secondary" style={{ fontSize: '16px', padding: '14px 28px' }}>
+                                    Explore Opportunities
+                                </Link>
+                            </>
+                        ) : user?.role === 'odej' ? (
+                            <Link href="/odej" className="btn-primary" style={{ fontSize: '16px', padding: '14px 28px' }}>
+                                Go to Dashboard
+                                <ArrowRight size={18} />
+                            </Link>
+                        ) : (
+                            <Link href="/opportunities" className="btn-primary" style={{ fontSize: '16px', padding: '14px 28px' }}>
+                                Explore Opportunities
+                                <ArrowRight size={18} />
+                            </Link>
+                        )}
                     </div>
 
                     {/* Wilaya indicator */}
