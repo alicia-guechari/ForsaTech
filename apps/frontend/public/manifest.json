@@ -1,0 +1,17 @@
+{
+    "name": "ForsaTech",
+    "short_name": "ForsaTech",
+    "description": "Algeria's youth opportunity matching platform",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#050510",
+    "theme_color": "#7c3aed",
+    "icons": [
+        {
+            "src": "/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
