@@ -64,6 +64,8 @@ interface AppState {
     approveInitiative: (initiativeId: string, odejName: string) => void
     addOffer: (offer: Offer) => void
     applyToOffer: (offerId: string, user: { id: string, name: string, wilaya?: string }) => void
+    updateOffer: (offerId: string, data: Partial<Offer>) => void
+    deleteOffer: (offerId: string) => void
     updateApplicationStatus: (applicationId: string, status: 'accepted' | 'rejected') => void
     markNotificationRead: (notificationId: string) => void
     markAllNotificationsRead: () => void
@@ -284,6 +286,13 @@ export const useAppStore = create<AppState>()(
                 }
             }),
             addOffer: (offer) => set((state) => ({ offers: [offer, ...state.offers] })),
+            updateOffer: (offerId, data) => set((state) => ({
+                offers: state.offers.map(offer => offer.id === offerId ? { ...offer, ...data } : offer)
+            })),
+            deleteOffer: (offerId) => set((state) => ({
+                offers: state.offers.filter(offer => offer.id !== offerId),
+                applications: state.applications.filter(app => app.offerId !== offerId)
+            })),
             applyToOffer: (offerId, user) => set((state) => {
                 const alreadyApplied = state.applications.some(app => app.offerId === offerId && app.userId === user.id)
                 if (alreadyApplied) return state

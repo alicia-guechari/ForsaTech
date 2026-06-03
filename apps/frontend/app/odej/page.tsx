@@ -31,8 +31,13 @@ export default function OdejDashboardPage() {
     const [activeTab, setActiveTab] = useState('overview')
     const offers = useAppStore(state => state.offers)
     const addOffer = useAppStore(state => state.addOffer)
+    const updateOffer = useAppStore(state => state.updateOffer)
+    const deleteOffer = useAppStore(state => state.deleteOffer)
     const [showCreateModal, setShowCreateModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [editOfferId, setEditOfferId] = useState<string | null>(null)
     const [createForm, setCreateForm] = useState(defaultFormState)
+    const [editForm, setEditForm] = useState(defaultFormState)
     const [formError, setFormError] = useState('')
     const user = useAuthStore(state => state.user)
 
@@ -96,6 +101,57 @@ export default function OdejDashboardPage() {
         setFormError('')
         setCreateForm(defaultFormState)
         setShowCreateModal(false)
+    }
+
+    function openEditModal(offer: typeof defaultFormState & { id: string }) {
+        setEditOfferId(offer.id)
+        setEditForm({
+            title: offer.title,
+            category: offer.category,
+            wilaya: offer.wilaya,
+            date: offer.date,
+            capacity: offer.capacity,
+            location: offer.location,
+            duration: offer.duration,
+            desc: offer.desc,
+        })
+        setFormError('')
+        setShowEditModal(true)
+    }
+
+    function handleEditInput(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+        const { name, value } = e.target
+        setEditForm(prev => ({ ...prev, [name]: name === 'capacity' ? Number(value) : value }))
+    }
+
+    function handleEditSubmit(e: React.FormEvent) {
+        e.preventDefault()
+        if (!editOfferId) return
+        if (!editForm.title.trim() || !editForm.location.trim() || !editForm.date || !editForm.desc.trim()) {
+            setFormError('Please complete all required fields.')
+            return
+        }
+
+        updateOffer(editOfferId, {
+            title: editForm.title.trim(),
+            category: editForm.category,
+            wilaya: editForm.wilaya,
+            date: editForm.date,
+            capacity: editForm.capacity,
+            remaining: Math.max(0, editForm.capacity - (offers.find(o => o.id === editOfferId)?.registered ?? 0)),
+            desc: editForm.desc.trim(),
+            location: editForm.location.trim(),
+            duration: editForm.duration,
+        })
+
+        setFormError('')
+        setShowEditModal(false)
+        setEditOfferId(null)
+    }
+
+    function handleRemoveOffer(offerId: string) {
+        if (!window.confirm('Delete this offer? This action cannot be undone.')) return
+        deleteOffer(offerId)
     }
 
     return (
@@ -239,6 +295,99 @@ export default function OdejDashboardPage() {
                         </div>
                     )}
 
+                    {showEditModal && (
+                        <div style={{
+                            position: 'fixed',
+                            inset: 0,
+                            zIndex: 200,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: 'rgba(5, 5, 16, 0.82)',
+                            padding: 24,
+                        }}>
+                            <div style={{
+                                width: '100%',
+                                maxWidth: 620,
+                                background: 'rgba(10, 10, 28, 0.95)',
+                                borderRadius: 24,
+                                border: '1px solid rgba(139,92,246,0.2)',
+                                boxShadow: '0 32px 80px rgba(0,0,0,0.35)',
+                                padding: '28px 30px',
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                                    <div>
+                                        <p style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.18em', color: '#a78bfa', margin: 0 }}>Edit Opportunity</p>
+                                        <h2 style={{ fontSize: 24, margin: '10px 0 0', color: '#f8f8ff' }}>Update your offer</h2>
+                                    </div>
+                                    <button onClick={() => setShowEditModal(false)} style={{
+                                        border: 'none', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 18,
+                                    }}>✕</button>
+                                </div>
+                                <form onSubmit={handleEditSubmit} style={{ display: 'grid', gap: 18 }}>
+                                    {formError && (
+                                        <div style={{ padding: 12, background: 'rgba(248,113,113,0.12)', color: '#fee2e2', borderRadius: 14 }}>
+                                            {formError}
+                                        </div>
+                                    )}
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Title</label>
+                                            <input name="title" value={editForm.title} onChange={handleEditInput} required className="input-dark" placeholder="Reforestation Volunteer Day" />
+                                        </div>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Category</label>
+                                            <select name="category" value={editForm.category} onChange={handleEditInput} className="input-dark" style={{ appearance: 'none' }}>
+                                                <option>Environment</option>
+                                                <option>Training</option>
+                                                <option>Sports</option>
+                                                <option>Arts</option>
+                                                <option>Leadership</option>
+                                                <option>Volunteering</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Wilaya</label>
+                                            <input name="wilaya" value={editForm.wilaya} onChange={handleEditInput} className="input-dark" placeholder="Béjaïa" />
+                                        </div>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Date</label>
+                                            <input name="date" type="date" value={editForm.date} onChange={handleEditInput} required className="input-dark" />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Capacity</label>
+                                            <input name="capacity" type="number" min={1} value={editForm.capacity} onChange={handleEditInput} className="input-dark" />
+                                        </div>
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Duration</label>
+                                            <input name="duration" value={editForm.duration} onChange={handleEditInput} className="input-dark" placeholder="1 day" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Location</label>
+                                        <input name="location" value={editForm.location} onChange={handleEditInput} className="input-dark" placeholder="Béjaïa Forest Park" />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: 13, color: 'var(--text-secondary)', marginBottom: 6 }}>Description</label>
+                                        <textarea name="desc" value={editForm.desc} onChange={handleEditInput} rows={5} className="input-dark" placeholder="Describe the opportunity, what participants will do, and what’s included." />
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
+                                        <button type="button" onClick={() => setShowEditModal(false)} className="btn-secondary" style={{ minWidth: 120, justifyContent: 'center' }}>
+                                            Cancel
+                                        </button>
+                                        <button type="submit" className="btn-primary" style={{ minWidth: 160, justifyContent: 'center' }}>
+                                            Save changes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 24 }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                             <div className="glass" style={{ padding: 24 }}>
@@ -296,9 +445,25 @@ export default function OdejDashboardPage() {
                                                         <span>{offer.registered} registered</span>
                                                         <span>· {offer.remaining} seats left</span>
                                                     </div>
-                                                    <Link href={`/opportunities/${offer.id}`} className="btn-secondary" style={{ padding: '10px 16px', fontSize: 13 }}>
-                                                        View offer details
-                                                    </Link>
+                                                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                                        <button
+                                                            onClick={() => openEditModal(offer)}
+                                                            className="btn-secondary"
+                                                            style={{ padding: '10px 16px', fontSize: 13, minWidth: 110 }}
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleRemoveOffer(offer.id)}
+                                                            className="btn-secondary"
+                                                            style={{ padding: '10px 16px', fontSize: 13, minWidth: 110, borderColor: 'rgba(248,113,113,0.3)', color: '#f87171' }}
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                        <Link href={`/opportunities/${offer.id}`} className="btn-secondary" style={{ padding: '10px 16px', fontSize: 13, minWidth: 150 }}>
+                                                            View offer details
+                                                        </Link>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))}

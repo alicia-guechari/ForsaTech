@@ -190,7 +190,7 @@ export function Navbar() {
                 )}
 
                 {/* Mobile hamburger */}
-                {isAuthenticated && (
+                {isAuthenticated && user?.role !== 'odej' && (
                     <button
                         onClick={() => setMenuOpen(prev => !prev)}
                         style={{
